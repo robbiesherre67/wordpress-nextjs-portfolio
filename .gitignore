@@ -1,0 +1,4 @@
+node_modules/
+.env.local
+wordpress/wp-content/upgrade/
+wordpress/wp-content/uploads/
