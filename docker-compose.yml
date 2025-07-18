@@ -1,0 +1,32 @@
+# docker-compose.yml
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpwd
+      MYSQL_DATABASE: wp_headless
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_pass
+    volumes:
+      - db_data:/var/lib/mysql
+
+  wordpress:
+    platform: linux/amd64
+    image: wordpress:6.4-apache
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - '8000:80'
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wp_user
+      WORDPRESS_DB_PASSWORD: wp_pass
+      WORDPRESS_DB_NAME: wp_headless
+    volumes:
+      - ./wordpress:/var/www/html
+
+volumes:
+  db_data:
