@@ -7,6 +7,9 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Inject your WP API URL
+    env:
+      NEXT_PUBLIC_WP_API_URL: ${{ secrets.NEXT_PUBLIC_WP_API_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,10 +24,10 @@ jobs:
           cd frontend
           npm ci
 
-      - name: Export static site
+      - name: Build + static export
         run: |
           cd frontend
-          npm run export
+          npm run build
 
       - name: Deploy via SSH & rsync
         uses: appleboy/ssh-action@v0.1.6
