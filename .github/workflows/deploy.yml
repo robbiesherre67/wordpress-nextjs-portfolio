@@ -19,23 +19,11 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      - name: Install dependencies + Linux LightningCSS
         run: |
           cd frontend
-          # clean install of prod & dev deps, skipping all optionalDependencies
           npm ci --legacy-peer-deps --omit=optional
-
-      - name: Install LightningCSS binary on Linux
-        if: runner.os == 'Linux'
-        run: |
-          cd frontend
-          npm install lightningcss-linux-x64 --legacy-peer-deps
-
-      - name: Install LightningCSS binary on macOS
-        if: runner.os == 'macOS'
-        run: |
-          cd frontend
-          npm install lightningcss-darwin-arm64 --legacy-peer-deps
+          npm install lightningcss-linux-x64 --legacy-peer-deps --omit=optional
 
       - name: Build & export static site
         run: |
