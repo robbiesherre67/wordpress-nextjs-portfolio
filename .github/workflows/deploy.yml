@@ -1,4 +1,4 @@
-name: Build & Deploy Front-end via Rsync
+name: Deploy Static Front-end via Rsync
 
 on:
   push:
@@ -7,28 +7,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      NEXT_PUBLIC_WP_API_URL: ${{ secrets.NEXT_PUBLIC_WP_API_URL }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies + Linux LightningCSS
-        run: |
-          cd frontend
-          npm ci --legacy-peer-deps --omit=optional
-          npm install lightningcss-linux-x64 --legacy-peer-deps --omit=optional
-
-      - name: Build & export static site
-        run: |
-          cd frontend
-          npm run build
 
       - name: Start ssh-agent & add key
         uses: webfactory/ssh-agent@v0.5.3
@@ -40,10 +22,9 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Rsync to server (auto-create folder)
+      - name: Rsync static export
         run: |
           rsync -avz --delete \
             -e "ssh -o StrictHostKeyChecking=no" \
-            --rsync-path="mkdir -p ~/public_html/app && rsync" \
             frontend/out/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/public_html/app/
