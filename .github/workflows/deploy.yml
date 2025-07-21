@@ -21,11 +21,9 @@ jobs:
 
       - name: Install dependencies (legacy peer deps, skip optional)
         run: |
-         cd frontend
-       # clean install of production & dev deps, no optional (skips both darwin & linux binaries)
-         npm ci --legacy-peer-deps --omit=optional
-       # now pull in *only* the Linux binary so our copy script can find it
-         npm install lightningcss-linux-x64 --legacy-peer-deps
+          cd frontend
+          npm ci --legacy-peer-deps --omit=optional
+          npm install lightningcss-linux-x64 --legacy-peer-deps
 
       - name: Start ssh-agent & add key
         uses: webfactory/ssh-agent@v0.5.3
