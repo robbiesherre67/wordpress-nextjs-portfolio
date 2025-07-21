@@ -22,7 +22,6 @@ jobs:
       - name: Install dependencies
         run: |
           cd frontend
-          # Clean install of prod & dev deps (no optional at all)
           npm ci --legacy-peer-deps --omit=optional
 
       - name: Install LightningCSS binary for CI
