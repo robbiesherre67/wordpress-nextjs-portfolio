@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { parse } from '@wordpress/blocks'
 import PortfolioItem from './blocks/PortfolioItem'
