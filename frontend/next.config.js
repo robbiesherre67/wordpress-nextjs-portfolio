@@ -4,6 +4,7 @@ const nextConfig = {
   output: 'export',
   images: {
     domains: ['www.idesigntek.com'],
+    unoptimized: true,     // ← disable the Image Optimization API
   },
 }
 
