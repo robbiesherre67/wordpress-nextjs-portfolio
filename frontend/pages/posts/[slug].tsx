@@ -1,12 +1,13 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import Link from 'next/link'
 import axios from 'axios'
+import BlockRenderer from '../../components/BlockRenderer'
 
 type Post = {
   id: number
   slug: string
   title: { rendered: string }
-  content: { rendered: string }
+  content: { rendered: string; raw: string }
 }
 
 interface PostPageProps {
@@ -25,8 +26,10 @@ export default function PostPage({ post }: PostPageProps) {
 
   return (
     <main style={{ maxWidth: 800, margin: 'auto', padding: '2rem' }}>
-      <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-      <article dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
+    <h1 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+    <article>
+      <BlockRenderer raw={post.content.raw} />
+    </article>
       <p><Link href="/">← Back to Home</Link></p>
     </main>
   )
