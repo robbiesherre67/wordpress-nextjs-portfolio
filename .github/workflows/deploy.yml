@@ -22,8 +22,7 @@ jobs:
       - name: Install & build
         run: |
           cd frontend
-          npm ci
-          npm run build
+          npm ci --legacy-peer-deps
 
       - name: Start ssh-agent & add key
         uses: webfactory/ssh-agent@v0.5.3
