@@ -19,10 +19,10 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install & build
+      - name: Install dependencies (legacy peer deps, skip optional)
         run: |
           cd frontend
-          npm ci --legacy-peer-deps
+          npm ci --legacy-peer-deps --no--optional
 
       - name: Start ssh-agent & add key
         uses: webfactory/ssh-agent@v0.5.3
