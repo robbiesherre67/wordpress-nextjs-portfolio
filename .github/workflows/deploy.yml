@@ -19,11 +19,25 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install dependencies (legacy peer deps, skip optional)
+      - name: Install dependencies
         run: |
           cd frontend
+          # Clean install of prod & dev deps (no optional at all)
           npm ci --legacy-peer-deps --omit=optional
-          npm install lightningcss-linux-x64 --legacy-peer-deps
+
+      - name: Install LightningCSS binary for CI
+        run: |
+          cd frontend
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            npm install lightningcss-linux-x64 --legacy-peer-deps
+          else
+            npm install lightningcss-darwin-arm64 --legacy-peer-deps
+          fi
+
+      - name: Build & export static site
+        run: |
+          cd frontend
+          npm run build
 
       - name: Start ssh-agent & add key
         uses: webfactory/ssh-agent@v0.5.3
