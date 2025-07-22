@@ -3,10 +3,8 @@ import Link from 'next/link'
 import axios from 'axios'
 
 type Post = {
-  id: number
   slug: string
   title: { rendered: string }
-  content: { rendered: string }
 }
 
 interface HomeProps {
@@ -14,7 +12,8 @@ interface HomeProps {
 }
 
 export default function Home({ posts }: HomeProps) {
-  if (!Array.isArray(posts) || posts.length === 0) {
+  // If there are no posts, show a friendly message
+  if (!posts.length) {
     return (
       <main style={{ maxWidth: 800, margin: 'auto', padding: '2rem' }}>
         <h1>My Portfolio</h1>
@@ -23,29 +22,32 @@ export default function Home({ posts }: HomeProps) {
     )
   }
 
+  // Otherwise render the list of posts
   return (
     <main style={{ maxWidth: 800, margin: 'auto', padding: '2rem' }}>
       <h1>My Portfolio</h1>
-      {posts.map((post) => (
-        <article key={post.id} style={{ marginBottom: '2rem' }}>
-          <Link href={`/posts/${post.slug}`}>
-            <h2 dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {posts.map((post) => (
+          <li key={post.slug} style={{ marginBottom: '1rem' }}>
+            <Link href={`/posts/${post.slug}`}>
+            <h2
+              dangerouslySetInnerHTML={{
+                __html: post.title.rendered,
+              }}
+            />
           </Link>
-          <div dangerouslySetInnerHTML={{ __html: post.content.rendered }} />
-        </article>
-      ))}
+          </li>
+        ))}
+      </ul>
     </main>
   )
 }
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  try {
-    const { data } = await axios.get<Post[]>(
-      `${process.env.NEXT_PUBLIC_WP_API_URL}/wp/v2/posts?_embed`
-    )
-    return { props: { posts: data } }
-  } catch (err) {
-    console.error('Failed to fetch posts:', err)
-    return { props: { posts: [] } }
+  const { data } = await axios.get<Pick<Post, 'slug' | 'title'>[]>(
+    `${process.env.NEXT_PUBLIC_WP_API_URL}/wp/v2/posts?_fields=slug,title`
+  )
+  return {
+    props: { posts: data },
   }
 }
