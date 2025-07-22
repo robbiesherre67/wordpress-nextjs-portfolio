@@ -1,6 +1,7 @@
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
 import axios from 'axios'
+import styles from '../styles/Home.module.css'
 
 type Post = {
   slug: string
@@ -15,31 +16,31 @@ interface HomeProps {
 export default function Home({ posts }: HomeProps) {
   if (!posts.length) {
     return (
-      <main style={{ maxWidth: 800, margin: 'auto', padding: '2rem' }}>
-        <h1>My Portfolio</h1>
+      <main className={styles.container}>
+        <h1>My WP Custom Portfolio</h1>
         <p>No posts to display yet.</p>
       </main>
     )
   }
 
   return (
-    <main style={{ maxWidth: 800, margin: 'auto', padding: '2rem' }}>
-      <h1>My Portfolio</h1>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+    <main className={styles.container}>
+      <h1>My WP Custom Portfolio</h1>
+      <ul className={styles.list}>
         {posts.map((post) => (
-          <li key={post.slug} style={{ marginBottom: '2rem' }}>
-            <h2>
-              <Link href={`/posts/${post.slug}`}>
-                {/** No <a> wrapper needed in Next.js 13+ */}
-                <span dangerouslySetInnerHTML={{ __html: post.title.rendered }} />
-              </Link>
-            </h2>
+          <li key={post.slug} className={styles.item}>
+            <Link href={`/posts/${post.slug}`}>
+              <h2
+                className={styles.titleLink}
+                dangerouslySetInnerHTML={{ __html: post.title.rendered }}
+              />
+            </Link>
             <div
-              style={{ margin: '0.5rem 0' }}
+              className={styles.excerpt}
               dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
             />
-            <Link href={`/posts/${post.slug}`}>
-              <button style={{ padding: '0.5rem 1rem' }}>Read more →</button>
+            <Link href={`/posts/${post.slug}`} className={styles.readMore}>
+              Read more →
             </Link>
           </li>
         ))}
